@@ -1,3 +1,4 @@
+import 'package:appsche/application/enum/ask_task_enum.dart';
 import 'package:appsche/domain/bloc/add_task/add_task_cubit.dart';
 import 'package:appsche/widget/box_field.dart';
 import 'package:appsche/widget/input_field.dart';
@@ -48,24 +49,44 @@ class AddTask extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                    padding: EdgeInsets.only(
-                      bottom: size.height * 0.02,
-                    ),
-                    child: InputField(
-                      hintText: 'Enter title here ',
-                      nameTitle: 'Title',
-                      size: size.width,
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                      bottom: size.height * 0.02,
-                    ),
-                    child: InputField(
-                      hintText: 'Enter note here ',
-                      nameTitle: 'Note',
-                      size: size.width,
-                    )),
+                BlocBuilder<AddTaskCubit, AddTaskState>(buildWhen: (pre, now) {
+                  return pre.titleMess != now.titleMess;
+                }, builder: (context, state) {
+                  return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: size.height * 0.02,
+                      ),
+                      child: InputField(
+                        hintText: 'Enter title here ',
+                        nameTitle: 'Title',
+                        isHidden: state.titleMess != "",
+                        validateText: state.titleMess,
+                        hasError: state.titleMess != "",
+                        onChanged: (value) {
+                          context.read<AddTaskCubit>().titleChanged(value);
+                        },
+                        size: size.width,
+                      ));
+                }),
+                BlocBuilder<AddTaskCubit, AddTaskState>(buildWhen: (pre, now) {
+                  return pre.noteMess != now.noteMess;
+                }, builder: (context, state) {
+                  return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: size.height * 0.02,
+                      ),
+                      child: InputField(
+                        hintText: 'Enter note here ',
+                        validateText: state.noteMess,
+                        hasError: state.noteMess != "",
+                        isHidden: state.noteMess != "",
+                        onChanged: (value) {
+                          context.read<AddTaskCubit>().noteChanged(value);
+                        },
+                        nameTitle: 'Note',
+                        size: size.width,
+                      ));
+                }),
                 BlocBuilder<AddTaskCubit, AddTaskState>(buildWhen: (pre, now) {
                   return pre.dateSaveTask != now.dateSaveTask;
                 }, builder: (context, state) {
@@ -378,12 +399,41 @@ class AddTask extends StatelessWidget {
                           ],
                         ),
                       ),
-                      RoundedButton(
-                          text: "Add",
-                          press: () {},
-                          color: colorMainBlue,
-                          textColor: colorSystemWhite,
-                          size: size.width * 0.3)
+                      BlocListener<AddTaskCubit, AddTaskState>(
+                          listener: (context, state) {
+                            if (state.status == AddTaskStatus.error) {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => Center(
+                                  child: AlertDialog(
+                                    content: const Text(
+                                      "ERROR FORM !!",
+                                      textAlign: TextAlign.center,
+                                      style: s20f700ColorErrorPro,
+                                    ),
+                                    actions: <Widget>[
+                                      RoundedButton(
+                                          text: 'Back',
+                                          press: () {
+                                            Navigator.pop(context);
+                                          },
+                                          color: colorMainBlue,
+                                          textColor: colorSystemWhite,
+                                          size: size.width)
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: RoundedButton(
+                              text: "Add",
+                              press: () {
+                                context.read<AddTaskCubit>().saveTaskToLocal();
+                              },
+                              color: colorMainBlue,
+                              textColor: colorSystemWhite,
+                              size: size.width * 0.3))
                     ],
                   ),
                 ),

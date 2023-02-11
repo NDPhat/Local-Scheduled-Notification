@@ -37,9 +37,9 @@ class $TaskEntityTable extends TaskEntity
   static const VerificationMeta _dateSaveMeta =
       const VerificationMeta('dateSave');
   @override
-  late final GeneratedColumn<String> dateSave = GeneratedColumn<String>(
+  late final GeneratedColumn<DateTime> dateSave = GeneratedColumn<DateTime>(
       'dateSave', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   static const VerificationMeta _startTimeMeta =
       const VerificationMeta('startTime');
   @override
@@ -166,7 +166,7 @@ class $TaskEntityTable extends TaskEntity
       isCompleted: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}isCompleted'])!,
       dateSave: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}dateSave'])!,
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}dateSave'])!,
       startTime: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}startTime'])!,
       endTime: attachedDatabase.typeMapping
@@ -191,7 +191,7 @@ class TaskEntityData extends DataClass implements Insertable<TaskEntityData> {
   final String title;
   final String note;
   final int isCompleted;
-  final String dateSave;
+  final DateTime dateSave;
   final String startTime;
   final String endTime;
   final String color;
@@ -215,7 +215,7 @@ class TaskEntityData extends DataClass implements Insertable<TaskEntityData> {
     map['title'] = Variable<String>(title);
     map['note'] = Variable<String>(note);
     map['isCompleted'] = Variable<int>(isCompleted);
-    map['dateSave'] = Variable<String>(dateSave);
+    map['dateSave'] = Variable<DateTime>(dateSave);
     map['startTime'] = Variable<String>(startTime);
     map['endTime'] = Variable<String>(endTime);
     map['color'] = Variable<String>(color);
@@ -247,7 +247,7 @@ class TaskEntityData extends DataClass implements Insertable<TaskEntityData> {
       title: serializer.fromJson<String>(json['title']),
       note: serializer.fromJson<String>(json['note']),
       isCompleted: serializer.fromJson<int>(json['isCompleted']),
-      dateSave: serializer.fromJson<String>(json['dateSave']),
+      dateSave: serializer.fromJson<DateTime>(json['dateSave']),
       startTime: serializer.fromJson<String>(json['startTime']),
       endTime: serializer.fromJson<String>(json['endTime']),
       color: serializer.fromJson<String>(json['color']),
@@ -263,7 +263,7 @@ class TaskEntityData extends DataClass implements Insertable<TaskEntityData> {
       'title': serializer.toJson<String>(title),
       'note': serializer.toJson<String>(note),
       'isCompleted': serializer.toJson<int>(isCompleted),
-      'dateSave': serializer.toJson<String>(dateSave),
+      'dateSave': serializer.toJson<DateTime>(dateSave),
       'startTime': serializer.toJson<String>(startTime),
       'endTime': serializer.toJson<String>(endTime),
       'color': serializer.toJson<String>(color),
@@ -277,7 +277,7 @@ class TaskEntityData extends DataClass implements Insertable<TaskEntityData> {
           String? title,
           String? note,
           int? isCompleted,
-          String? dateSave,
+          DateTime? dateSave,
           String? startTime,
           String? endTime,
           String? color,
@@ -336,7 +336,7 @@ class TaskEntityCompanion extends UpdateCompanion<TaskEntityData> {
   final Value<String> title;
   final Value<String> note;
   final Value<int> isCompleted;
-  final Value<String> dateSave;
+  final Value<DateTime> dateSave;
   final Value<String> startTime;
   final Value<String> endTime;
   final Value<String> color;
@@ -359,7 +359,7 @@ class TaskEntityCompanion extends UpdateCompanion<TaskEntityData> {
     required String title,
     required String note,
     required int isCompleted,
-    required String dateSave,
+    required DateTime dateSave,
     required String startTime,
     required String endTime,
     required String color,
@@ -379,7 +379,7 @@ class TaskEntityCompanion extends UpdateCompanion<TaskEntityData> {
     Expression<String>? title,
     Expression<String>? note,
     Expression<int>? isCompleted,
-    Expression<String>? dateSave,
+    Expression<DateTime>? dateSave,
     Expression<String>? startTime,
     Expression<String>? endTime,
     Expression<String>? color,
@@ -405,7 +405,7 @@ class TaskEntityCompanion extends UpdateCompanion<TaskEntityData> {
       Value<String>? title,
       Value<String>? note,
       Value<int>? isCompleted,
-      Value<String>? dateSave,
+      Value<DateTime>? dateSave,
       Value<String>? startTime,
       Value<String>? endTime,
       Value<String>? color,
@@ -441,7 +441,7 @@ class TaskEntityCompanion extends UpdateCompanion<TaskEntityData> {
       map['isCompleted'] = Variable<int>(isCompleted.value);
     }
     if (dateSave.present) {
-      map['dateSave'] = Variable<String>(dateSave.value);
+      map['dateSave'] = Variable<DateTime>(dateSave.value);
     }
     if (startTime.present) {
       map['startTime'] = Variable<String>(startTime.value);

@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 part 'add_task_state.dart';
 
 class AddTaskCubit extends Cubit<AddTaskState> {
+  String titleMess = "";
+  String noteMess = "";
   final TaskLocalRepository taskLocalRepository;
   AddTaskCubit({required TaskLocalRepository taskLocalRepository})
       : taskLocalRepository = taskLocalRepository,
@@ -36,6 +38,20 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(state.copyWith(indexRemind: value));
   }
 
+  void titleChanged(String value) {
+    state.title = value;
+    if (state.titleMess.isNotEmpty) {
+      emit(state.copyWith(titleMess: ""));
+    }
+  }
+
+  void noteChanged(String value) {
+    state.note = value;
+    if (state.noteMess.isNotEmpty) {
+      emit(state.copyWith(noteMess: ""));
+    }
+  }
+
   void remindSelected(String value) {
     emit(state.copyWith(remind: value));
   }
@@ -48,16 +64,58 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(state.copyWith(repeat: value));
   }
 
+  bool titleValidator(String title) {
+    if (title.isEmpty) {
+      titleMess = 'This field is empty';
+      return false;
+    } else {
+      titleMess = "";
+      return true;
+    }
+  }
+
+  bool noteValidator(String note) {
+    if (note.isEmpty) {
+      noteMess = 'This field is empty';
+      return false;
+    } else {
+      noteMess = "";
+      return true;
+    }
+  }
+
+  bool isFormValid() {
+    if (noteValidator(state.note) & titleValidator(state.title)) {
+      return true;
+    }
+    return false;
+  }
+
   Future<void> saveTaskToLocal() async {
-    try {
-      final entity = TaskEntityCompanion(
-        title: Value(state.title),
-        note: Value(state.note),
-      );
-      //insert task
-      taskLocalRepository.insertTask(entity);
-    } on Exception catch (e) {
-      print(e.toString());
+    emit(state.copyWith(status: AddTaskStatus.initial));
+    if (isFormValid()) {
+      try {
+        final entity = TaskEntityCompanion(
+          title: Value(state.title),
+          note: Value(state.note),
+          dateSave: Value(state.dateSaveTask),
+          startTime: Value(state.timeStart),
+          endTime: Value(state.timeEnd),
+          remind: Value(state.remind),
+          repeat: Value(state.repeat),
+          isCompleted: const Value(1),
+          color: Value(state.color),
+        );
+        //insert task
+        taskLocalRepository.insertTask(entity);
+      } on Exception catch (e) {
+        print(e.toString());
+      }
+    } else {
+      emit(state.copyWith(
+          titleMess: titleMess,
+          noteMess: noteMess,
+          status: AddTaskStatus.error));
     }
   }
 }

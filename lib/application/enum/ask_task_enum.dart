@@ -1,1 +1,1 @@
-enum AddTaskStatus { initial,success,save}
+enum AddTaskStatus { initial,success,save,error}
