@@ -279,31 +279,9 @@ class _MyScrollDatePickerState extends State<MyScrollDatePicker> {
                     Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 62),
-                          width: widget.options.itemExtent * 2.5,
                           height: widget.options.itemExtent,
                           decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.15),
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(4)),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 12),
-                          width: widget.options.itemExtent,
-                          height: widget.options.itemExtent,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.15),
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(4)),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          width: widget.options.itemExtent * 1.5,
-                          height: widget.options.itemExtent,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.15),
+                            color: Colors.grey,
                             borderRadius:
                             const BorderRadius.all(Radius.circular(4)),
                           ),

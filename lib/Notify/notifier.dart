@@ -22,9 +22,8 @@ class NotifyHelper {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
   displayNotification({required String title, required String body}) async {
-    print("doing test");
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'your channel id', 'your channel name',
+        'your channel id', 'your channel name','your channel description',
         importance: Importance.max, priority: Priority.high);
     var platformChannelSpecifics = new NotificationDetails(
         android: androidPlatformChannelSpecifics);
