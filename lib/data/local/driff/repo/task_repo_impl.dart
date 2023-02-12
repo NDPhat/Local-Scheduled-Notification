@@ -1,25 +1,26 @@
 import 'package:appsche/data/local/driff/db/db_app.dart';
 import 'package:appsche/data/local/driff/repo/task_repo.dart';
+import 'package:drift/drift.dart';
 
 class TaskLocalRepoImpl extends TaskLocalRepository {
   TaskLocalRepoImpl(super.appDb);
 
   @override
-  Future<void> deleteTask(TaskEntityCompanion entity) {
-    // TODO: implement deleteTask
-    throw UnimplementedError();
+  Future<void> deleteTask(int taskId) async {
+    await (appDb.delete(appDb.taskEntity)..where((t) => t.id.equals(taskId)))
+        .go();
   }
 
   @override
-  Stream<List<TaskEntityData>> getAllTask() {
-    // TODO: implement getAllTask
-    throw UnimplementedError();
+  Stream<List<TaskEntityData>> getAllTask() async* {
+    yield* (appDb.select(appDb.taskEntity)).watch();
   }
 
   @override
-  Stream<TaskEntityData?> getTaskByDay() {
-    // TODO: implement getTaskByDay
-    throw UnimplementedError();
+  Stream<List<TaskEntityData>> getAllTaskByDay(String dayNeeded) async* {
+    yield* (appDb.select(appDb.taskEntity)
+          ..where((tbl) => tbl.dateSave.equals(dayNeeded)))
+        .watch();
   }
 
   @override
@@ -28,9 +29,9 @@ class TaskLocalRepoImpl extends TaskLocalRepository {
   }
 
   @override
-  Future<void> updateTask(TaskEntityCompanion entity) {
-    // TODO: implement updateTask
-    throw UnimplementedError();
+  Future<void> updateTask(TaskEntityData entity) async {
+    (appDb.update(appDb.taskEntity)..where((tbl) => tbl.id.equals(entity.id)))
+        .write(const TaskEntityCompanion(isCompleted: Value(1)));
   }
   //
   // //WEIGHT IMPL

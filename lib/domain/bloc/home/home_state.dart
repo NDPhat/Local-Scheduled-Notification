@@ -1,7 +1,7 @@
 part of 'home_cubit.dart';
 
 class HomeState extends Equatable {
-  DateTime timeNow;
+  String timeNow;
   HomeStatus status;
 
   HomeState({
@@ -11,7 +11,7 @@ class HomeState extends Equatable {
   });
   factory HomeState.initial() {
     return HomeState(
-      timeNow: DateTime.now(),
+      timeNow: formatDateInput.format(DateTime.now()),
       status: HomeStatus.initial,
       //user: null,
     );
@@ -26,7 +26,7 @@ class HomeState extends Equatable {
       ];
 
   HomeState copyWith({
-    DateTime? timeNow,
+    String? timeNow,
     HomeStatus? status,
     // auth.user? user,
   }) {

@@ -1,5 +1,6 @@
 import 'package:appsche/application/enum/ask_task_enum.dart';
 import 'package:appsche/domain/bloc/add_task/add_task_cubit.dart';
+import 'package:appsche/presentation/navigation/routers.dart';
 import 'package:appsche/widget/box_field.dart';
 import 'package:appsche/widget/input_field.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
+import '../../../application/utils/format/format_date.dart';
 import '../../../rsc/color.dart';
 import '../../../rsc/text_style.dart';
 import '../../../widget/button.dart';
@@ -95,7 +97,7 @@ class AddTask extends StatelessWidget {
                         bottom: size.height * 0.02,
                       ),
                       child: BoxField(
-                          hintText: f.format(state.dateSaveTask),
+                          hintText: state.dateSaveTask,
                           nameTitle: 'Date',
                           size: size.width,
                           icon: const Icon(Icons.calendar_month),
@@ -135,14 +137,15 @@ class AddTask extends StatelessWidget {
                                                 ),
                                                 maximumDate: DateTime.now().add(
                                                     const Duration(days: 30)),
-                                                selectedDate:
-                                                    state.dateSaveTask,
+                                                selectedDate:DateTime.now(),
                                                 locale: const Locale('en'),
                                                 onDateTimeChanged:
                                                     (DateTime value) {
                                                   context
                                                       .read<AddTaskCubit>()
-                                                      .dateTimeChange(value);
+                                                      .dateTimeChange(
+                                                          formatDateInput
+                                                              .format(value));
                                                 }),
                                           ),
                                           Row(
@@ -242,7 +245,6 @@ class AddTask extends StatelessWidget {
                                                 hour: DateTime.now().hour,
                                                 minute: DateTime.now().minute))
                                         .format(context));
-                                print(state.timeEnd);
                               }));
                     }),
                   ],
@@ -416,6 +418,33 @@ class AddTask extends StatelessWidget {
                                           text: 'Back',
                                           press: () {
                                             Navigator.pop(context);
+                                          },
+                                          color: colorMainBlue,
+                                          textColor: colorSystemWhite,
+                                          size: size.width)
+                                    ],
+                                  ),
+                                ),
+                              );
+                              context
+                                  .read<AddTaskCubit>()
+                                  .clearOldDataErrorForm();
+                            } else if (state.status == AddTaskStatus.success) {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => Center(
+                                  child: AlertDialog(
+                                    content: const Text(
+                                      "ADD DONE !!",
+                                      textAlign: TextAlign.center,
+                                      style: s20f700ColorMBlue,
+                                    ),
+                                    actions: <Widget>[
+                                      RoundedButton(
+                                          text: 'Done',
+                                          press: () {
+                                            Navigator.pushNamed(
+                                                context, Routers.home);
                                           },
                                           color: colorMainBlue,
                                           textColor: colorSystemWhite,

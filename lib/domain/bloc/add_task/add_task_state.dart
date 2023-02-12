@@ -6,7 +6,7 @@ class AddTaskState extends Equatable {
   String note;
   String noteMess;
   String titleMess;
-  DateTime dateSaveTask;
+  String dateSaveTask;
   AddTaskStatus status;
   String timeStart;
   String timeEnd;
@@ -43,9 +43,9 @@ class AddTaskState extends Equatable {
       title: '',
       noteMess: '',
       titleMess: '',
-      dateSaveTask: DateTime.now(),
-      timeStart: DateFormat('hh:mm aa').format(DateTime.now()),
-      timeEnd: DateFormat('hh:mm aa').format(DateTime.now()),
+      dateSaveTask: formatDateInput.format(DateTime.now()),
+      timeStart: formatTimeInput.format(DateTime.now()),
+      timeEnd: formatTimeInput.format(DateTime.now()),
       status: AddTaskStatus.initial,
       //user: null,
     );
@@ -73,7 +73,7 @@ class AddTaskState extends Equatable {
   AddTaskState copyWith(
       {String? color,
       AddTaskStatus? status,
-      DateTime? dateSave,
+      String? dateSave,
       String? remind,
       String? repeat,
       int? indexRemind,

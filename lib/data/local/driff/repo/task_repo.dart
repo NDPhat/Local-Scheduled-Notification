@@ -7,8 +7,8 @@ abstract class TaskLocalRepository {
   TaskLocalRepository(this.appDb);
   //WEIGHT INTERFACE
   Future<void> insertTask(TaskEntityCompanion entity);
-  Future<void> deleteTask(TaskEntityCompanion entity);
-  Future<void> updateTask(TaskEntityCompanion entity);
-  Stream<TaskEntityData?> getTaskByDay();
+  Future<void> deleteTask(int taskId);
+  Future<void> updateTask(TaskEntityData entity);
+  Stream<List<TaskEntityData>> getAllTaskByDay(String dayNeeded);
   Stream<List<TaskEntityData>> getAllTask();
 }

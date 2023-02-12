@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:drift/drift.dart';
 import 'package:intl/intl.dart';
+
+import '../../../application/utils/format/format_date.dart';
 part 'add_task_state.dart';
 
 class AddTaskCubit extends Cubit<AddTaskState> {
@@ -15,14 +17,14 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       : taskLocalRepository = taskLocalRepository,
         super(AddTaskState.initial());
   void colorChange(String color) {
-    emit(state.copyWith(color: color));
+    emit(state.copyWith(color: color, status: AddTaskStatus.initial));
   }
 
-  void dateTimeChange(DateTime date) {
+  void dateTimeChange(String date) {
     state.dateSaveTask = date;
   }
 
-  void emitDateTimeChange(DateTime date) {
+  void emitDateTimeChange(String date) {
     emit(state.copyWith(dateSave: date));
   }
 
@@ -60,6 +62,28 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(state.copyWith(indexRepeat: value));
   }
 
+  void clearOldDataErrorForm() {
+    emit(state.copyWith(status: AddTaskStatus.initial));
+  }
+
+  void clearForm() {
+    emit(state.copyWith(
+      indexRemind: 0,
+      indexRepeat: 0,
+      remind: '5 minutes early',
+      repeat: 'None',
+      color: 'blue',
+      note: '',
+      title: '',
+      noteMess: '',
+      titleMess: '',
+      dateSave: formatDateInput.format(DateTime.now()),
+      timeStart: DateFormat('hh:mm aa').format(DateTime.now()),
+      timeEnd: DateFormat('hh:mm aa').format(DateTime.now()),
+      status: AddTaskStatus.initial,
+    ));
+  }
+
   void repeatSelected(String value) {
     emit(state.copyWith(repeat: value));
   }
@@ -92,24 +116,28 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }
 
   Future<void> saveTaskToLocal() async {
-    emit(state.copyWith(status: AddTaskStatus.initial));
     if (isFormValid()) {
       try {
         final entity = TaskEntityCompanion(
           title: Value(state.title),
           note: Value(state.note),
-          dateSave: Value(state.dateSaveTask),
+          dateSave: Value(state.dateSaveTask.toString()),
           startTime: Value(state.timeStart),
           endTime: Value(state.timeEnd),
           remind: Value(state.remind),
           repeat: Value(state.repeat),
-          isCompleted: const Value(1),
+          isCompleted: const Value(0),
           color: Value(state.color),
         );
         //insert task
-        taskLocalRepository.insertTask(entity);
+        await taskLocalRepository.insertTask(entity);
+        emit(state.copyWith(status: AddTaskStatus.success));
       } on Exception catch (e) {
         print(e.toString());
+        emit(state.copyWith(
+            titleMess: titleMess,
+            noteMess: noteMess,
+            status: AddTaskStatus.error));
       }
     } else {
       emit(state.copyWith(

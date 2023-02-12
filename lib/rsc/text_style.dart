@@ -63,6 +63,8 @@ const s14f400ColorErrorPro =
 TextStyle(fontWeight: font400, fontSize: 14, color: colorErrorPrimary);
 const s20f700ColorErrorPro =
 TextStyle(fontWeight: font700, fontSize: 20, color: colorErrorPrimary);
+const s20f700ColorMBlue =
+TextStyle(fontWeight: font700, fontSize: 20, color: colorMainBlue);
 const s26f700ColorBlueMa =
 TextStyle(fontSize: 26, fontWeight: font700, color: colorMainBlue);
 const s16f700ColorMainTealPri = TextStyle(
