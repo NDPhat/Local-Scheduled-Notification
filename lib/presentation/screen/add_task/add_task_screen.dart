@@ -270,7 +270,7 @@ class AddTask extends StatelessWidget {
                                       .read<AddTaskCubit>()
                                       .emitEndTimeChange((TimeOfDay(
                                               hour: DateTime.now().hour,
-                                              minute: DateTime.now().minute+30))
+                                              minute: DateTime.now().minute+10))
                                           .format(context));
                                 } else {
                                   context
