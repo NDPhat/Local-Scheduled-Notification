@@ -24,7 +24,7 @@ class NotifyHelper {
     // await flutterLocalNotificationsPlugin.initialize(
     //     initializationSettings,
     //     onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings );
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   displayNotification({required String title, required String body}) async {
@@ -41,6 +41,7 @@ class NotifyHelper {
       payload: 'It could be anything you pass',
     );
   }
+
   Future selectNotification(String payload) async {
     if (payload != null) {
       print('notification payload: $payload');
@@ -57,8 +58,10 @@ class NotifyHelper {
         _convertTime(hour, minute),
         // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
-            android: AndroidNotificationDetails('your channel id',
-                'your channel name', 'your channel description')),
+            android: AndroidNotificationDetails(
+                'channel.id', 'channel.name', 'your channel description',
+                sound: UriAndroidNotificationSound("assets/image/sound.mp3"),
+                playSound: true)),
         androidAllowWhileIdle: true,
         matchDateTimeComponents: DateTimeComponents.time,
         uiLocalNotificationDateInterpretation:

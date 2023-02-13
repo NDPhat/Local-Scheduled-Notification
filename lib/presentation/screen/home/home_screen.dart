@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
 
+import '../../../application/utils/extension/remind_case.dart';
 import '../../../application/utils/format/format_date.dart';
 import '../../../data/models/task.dart';
 import '../../../main.dart';
@@ -98,9 +99,10 @@ class HomeScreen extends StatelessWidget {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           Task task = snapshot.data![index].toGetTaskModel();
+                          int timeRemind=findRemindTime(task.remeind!);
                           NotifyHelper().scheduledNotification(
                               int.parse(task.startTime.toString().split(":")[0]),
-                              int.parse(task.startTime.toString().split(":")[1]),
+                              int.parse(task.startTime.toString().split(":")[1])-timeRemind,
                               task);
                           return SizedBox(
                               child: GestureDetector(
@@ -154,9 +156,9 @@ class HomeScreen extends StatelessWidget {
                                                           colorSystemWhite,
                                                       size: size.width * 0.8),
                                                   RoundedButton(
-                                                      text: 'Close',
+                                                      text: 'Edit Task',
                                                       press: () {
-                                                        Navigator.pop(context);
+                                                        Navigator.pushNamed(context, Routers.editTask,arguments: task);
                                                       },
                                                       color: colorGreyTetiary,
                                                       textColor:

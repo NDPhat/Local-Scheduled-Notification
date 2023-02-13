@@ -10,13 +10,14 @@ import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 import '../../../application/utils/extension/compare_timeofDay.dart';
 import '../../../application/utils/format/format_date.dart';
+import '../../../data/models/task.dart';
 import '../../../rsc/color.dart';
 import '../../../rsc/text_style.dart';
 import '../../../widget/button.dart';
 import '../../../widget/date_picker.dart';
 
-class AddTask extends StatelessWidget {
-  AddTask({Key? key}) : super(key: key);
+class EditTask extends StatelessWidget {
+  EditTask({Key? key}) : super(key: key);
   final f = DateFormat('MM/dd/yyyy');
   final l = DateFormat('hh:mm aa');
   String startTime = DateFormat('hh:mm aa').format(DateTime.now());
@@ -35,12 +36,13 @@ class AddTask extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    final taskEdit = ModalRoute.of(context)!.settings.arguments as Task;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Padding(
           padding: EdgeInsets.only(left: size.width * 0.15),
-          child: const Text('Add your task'),
+          child: const Text('Edit your task'),
         ),
       ),
       body: Padding(
@@ -60,6 +62,7 @@ class AddTask extends StatelessWidget {
                         bottom: size.height * 0.02,
                       ),
                       child: InputField(
+                        controller: TextEditingController(text: taskEdit.title.toString()),
                         hintText: 'Enter title here ',
                         nameTitle: 'Title',
                         isHidden: state.titleMess != "",
@@ -79,6 +82,7 @@ class AddTask extends StatelessWidget {
                         bottom: size.height * 0.02,
                       ),
                       child: InputField(
+                        controller: TextEditingController(text: taskEdit.note.toString()),
                         hintText: 'Enter note here ',
                         validateText: state.noteMess,
                         hasError: state.noteMess != "",
@@ -123,18 +127,18 @@ class AddTask extends StatelessWidget {
                                             height: size.height * 0.23,
                                             child: MyScrollDatePicker(
                                                 scrollViewOptions:
-                                                    const DatePickerScrollViewOptions(
+                                                const DatePickerScrollViewOptions(
                                                   year: ScrollViewDetailOptions(
                                                       margin:
-                                                          EdgeInsets.all(10)),
+                                                      EdgeInsets.all(10)),
                                                   month:
-                                                      ScrollViewDetailOptions(
-                                                          margin:
-                                                              EdgeInsets.all(
-                                                                  10)),
+                                                  ScrollViewDetailOptions(
+                                                      margin:
+                                                      EdgeInsets.all(
+                                                          10)),
                                                   day: ScrollViewDetailOptions(
                                                       margin:
-                                                          EdgeInsets.all(10)),
+                                                      EdgeInsets.all(10)),
                                                 ),
                                                 maximumDate: DateTime.now().add(
                                                     const Duration(days: 30)),
@@ -145,13 +149,13 @@ class AddTask extends StatelessWidget {
                                                   context
                                                       .read<AddTaskCubit>()
                                                       .dateTimeChange(
-                                                          formatDateInput
-                                                              .format(value));
+                                                      formatDateInput
+                                                          .format(value));
                                                 }),
                                           ),
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                             children: [
                                               RoundedButton(
                                                   text: "Cancel",
@@ -167,7 +171,7 @@ class AddTask extends StatelessWidget {
                                                     context
                                                         .read<AddTaskCubit>()
                                                         .emitDateTimeChange(
-                                                            state.dateSaveTask);
+                                                        state.dateSaveTask);
                                                     Navigator.pop(context);
                                                   },
                                                   color: colorMainBlue,
@@ -185,8 +189,8 @@ class AddTask extends StatelessWidget {
                   children: [
                     BlocBuilder<AddTaskCubit, AddTaskState>(
                         buildWhen: (pre, now) {
-                      return pre.timeStart != now.timeStart;
-                    }, builder: (context, state) {
+                          return pre.timeStart != now.timeStart;
+                        }, builder: (context, state) {
                       return Padding(
                           padding: EdgeInsets.only(
                             bottom: size.height * 0.02,
@@ -199,7 +203,7 @@ class AddTask extends StatelessWidget {
                               onTapped: () async {
                                 var timePic = await showTimePicker(
                                     initialEntryMode:
-                                        TimePickerEntryMode.inputOnly,
+                                    TimePickerEntryMode.inputOnly,
                                     context: context,
                                     initialTime: TimeOfDay(
                                         hour: int.parse(
@@ -210,16 +214,16 @@ class AddTask extends StatelessWidget {
                                 context
                                     .read<AddTaskCubit>()
                                     .emitStartTimeChange((timePic ??
-                                            TimeOfDay(
-                                                hour: DateTime.now().hour,
-                                                minute: DateTime.now().minute))
-                                        .format(context));
+                                    TimeOfDay(
+                                        hour: DateTime.now().hour,
+                                        minute: DateTime.now().minute))
+                                    .format(context));
                               }));
                     }),
                     BlocBuilder<AddTaskCubit, AddTaskState>(
                         buildWhen: (pre, now) {
-                      return pre.timeEnd != now.timeEnd;
-                    }, builder: (context, state) {
+                          return pre.timeEnd != now.timeEnd;
+                        }, builder: (context, state) {
                       return Padding(
                           padding: EdgeInsets.only(
                             bottom: size.height * 0.02,
@@ -232,7 +236,7 @@ class AddTask extends StatelessWidget {
                               onTapped: () async {
                                 var timePic = await showTimePicker(
                                     initialEntryMode:
-                                        TimePickerEntryMode.inputOnly,
+                                    TimePickerEntryMode.inputOnly,
                                     context: context,
                                     initialTime: TimeOfDay(
                                         hour: int.parse(
@@ -242,9 +246,9 @@ class AddTask extends StatelessWidget {
                                             .split(" ")[0])));
                                 //compare timeEnd va timeStart
                                 if (convertTimeDayToDouble(timePic ??
-                                        TimeOfDay(
-                                            hour: DateTime.now().hour,
-                                            minute: DateTime.now().minute)) <
+                                    TimeOfDay(
+                                        hour: DateTime.now().hour,
+                                        minute: DateTime.now().minute)) <
                                     convertTimeDayToDouble(
                                         convertToTimeOfDay(state.timeStart))) {
                                   AlertDialog(
@@ -267,18 +271,18 @@ class AddTask extends StatelessWidget {
                                   context
                                       .read<AddTaskCubit>()
                                       .emitEndTimeChange((TimeOfDay(
-                                              hour: DateTime.now().hour,
-                                              minute: DateTime.now().minute+30))
-                                          .format(context));
+                                      hour: DateTime.now().hour,
+                                      minute: DateTime.now().minute+30))
+                                      .format(context));
                                 } else {
                                   context
                                       .read<AddTaskCubit>()
                                       .emitEndTimeChange((timePic ??
-                                              TimeOfDay(
-                                                  hour: DateTime.now().hour,
-                                                  minute:
-                                                      DateTime.now().minute))
-                                          .format(context));
+                                      TimeOfDay(
+                                          hour: DateTime.now().hour,
+                                          minute:
+                                          DateTime.now().minute))
+                                      .format(context));
                                 }
                               }));
                     }),
@@ -373,28 +377,28 @@ class AddTask extends StatelessWidget {
                           children: [
                             BlocBuilder<AddTaskCubit, AddTaskState>(
                                 builder: (context, state) {
-                              return GestureDetector(
-                                onTap: () {
-                                  context
-                                      .read<AddTaskCubit>()
-                                      .colorChange("blue");
-                                },
-                                child: CircleAvatar(
-                                    backgroundColor: colorMainBlue,
-                                    radius: 15,
-                                    child: state.color == "blue"
-                                        ? const Icon(
-                                            (Icons.done),
-                                            color: colorSystemWhite,
-                                            size: 16,
-                                          )
-                                        : Container()),
-                              );
-                            }),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      context
+                                          .read<AddTaskCubit>()
+                                          .colorChange("blue");
+                                    },
+                                    child: CircleAvatar(
+                                        backgroundColor: colorMainBlue,
+                                        radius: 15,
+                                        child: state.color == "blue"
+                                            ? const Icon(
+                                          (Icons.done),
+                                          color: colorSystemWhite,
+                                          size: 16,
+                                        )
+                                            : Container()),
+                                  );
+                                }),
                             BlocBuilder<AddTaskCubit, AddTaskState>(
                                 buildWhen: (pre, now) {
-                              return pre.color != now.color;
-                            }, builder: (context, state) {
+                                  return pre.color != now.color;
+                                }, builder: (context, state) {
                               return GestureDetector(
                                 onTap: () {
                                   context
@@ -406,33 +410,33 @@ class AddTask extends StatelessWidget {
                                     radius: 15,
                                     child: state.color == "yellow"
                                         ? const Icon(
-                                            (Icons.done),
-                                            color: colorSystemWhite,
-                                            size: 16,
-                                          )
+                                      (Icons.done),
+                                      color: colorSystemWhite,
+                                      size: 16,
+                                    )
                                         : Container()),
                               );
                             }),
                             BlocBuilder<AddTaskCubit, AddTaskState>(
                                 builder: (context, state) {
-                              return GestureDetector(
-                                onTap: () {
-                                  context
-                                      .read<AddTaskCubit>()
-                                      .colorChange("red");
-                                },
-                                child: CircleAvatar(
-                                    backgroundColor: colorErrorPrimary,
-                                    radius: 15,
-                                    child: state.color == "red"
-                                        ? const Icon(
-                                            (Icons.done),
-                                            color: colorSystemWhite,
-                                            size: 16,
-                                          )
-                                        : Container()),
-                              );
-                            }),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      context
+                                          .read<AddTaskCubit>()
+                                          .colorChange("red");
+                                    },
+                                    child: CircleAvatar(
+                                        backgroundColor: colorErrorPrimary,
+                                        radius: 15,
+                                        child: state.color == "red"
+                                            ? const Icon(
+                                          (Icons.done),
+                                          color: colorSystemWhite,
+                                          size: 16,
+                                        )
+                                            : Container()),
+                                  );
+                                }),
                           ],
                         ),
                       ),
@@ -535,8 +539,8 @@ class DropDownRemind extends StatelessWidget {
                       right: size.width * 0.05),
                   child: BlocBuilder<AddTaskCubit, AddTaskState>(
                       buildWhen: (pre, now) {
-                    return pre.indexRemind != now.indexRemind;
-                  }, builder: (contextBL, state) {
+                        return pre.indexRemind != now.indexRemind;
+                      }, builder: (contextBL, state) {
                     return ListTile(
                         onTap: () {
                           contextBL.read<AddTaskCubit>().remindChange(index);
@@ -604,8 +608,8 @@ class DropDownRepeat extends StatelessWidget {
                       right: size.width * 0.05),
                   child: BlocBuilder<AddTaskCubit, AddTaskState>(
                       buildWhen: (pre, now) {
-                    return pre.indexRepeat != now.indexRepeat;
-                  }, builder: (contextBL, state) {
+                        return pre.indexRepeat != now.indexRepeat;
+                      }, builder: (contextBL, state) {
                     return ListTile(
                         onTap: () {
                           contextBL.read<AddTaskCubit>().repeatChange(index);
