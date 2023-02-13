@@ -12,10 +12,12 @@ class InputField extends StatelessWidget {
   TextEditingController? controller;
   ValueChanged<String>? onChanged;
   bool? hasError;
+  bool? readOnly;
 
   String? dataController;
   InputField({
     Key? key,
+    this.readOnly,
     required this.hintText,
     required this.nameTitle,
     required this.size,
@@ -34,6 +36,7 @@ class InputField extends StatelessWidget {
         validateText: validateText == null ? '' : validateText!,
         isHidden: isHidden == null ? false : isHidden!,
         child: TextField(
+          readOnly: readOnly != null ? false :true,
           textInputAction: TextInputAction.next,
           controller: controller != null ? controller : null,
           style: const TextStyle(color: colorGreyTetiary),

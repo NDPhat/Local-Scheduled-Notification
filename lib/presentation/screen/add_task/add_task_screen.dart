@@ -30,6 +30,8 @@ class AddTask extends StatelessWidget {
   ];
   final listRepeat = [
     "None",
+    "Repeat 1 hour",
+    "Repeat 2 hour",
     "Repeat Daily",
     "Repeat Monthly",
   ];

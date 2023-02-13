@@ -18,3 +18,21 @@ findRemindTime(String timeRemind) {
       return 5;
   }
 }
+
+findRepeatTime(String timeRepeat) {
+  switch (timeRepeat) {
+    case "None":
+      return 0;
+    case "Repeat 1 hour":
+      return 1;
+    case "Repeat 2 hour":
+      return 2;
+    case "Repeat Daily":
+      return 24;
+    case "Repeat Monthly":
+      return 0;
+
+    default:
+      return 0;
+  }
+}

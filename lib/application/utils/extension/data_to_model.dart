@@ -14,6 +14,6 @@ extension TaskModel on TaskEntityData {
         endTime: endTime,
         color: color,
         repeat: repeat,
-        remeind: remind);
+        remind: remind);
   }
 }

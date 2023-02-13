@@ -99,11 +99,36 @@ class HomeScreen extends StatelessWidget {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           Task task = snapshot.data![index].toGetTaskModel();
-                          int timeRemind=findRemindTime(task.remeind!);
+                          int timeRemind = findRemindTime(task.remind!);
+                          int timeRepeat = findRepeatTime(task.repeat!);
                           NotifyHelper().scheduledNotification(
-                              int.parse(task.startTime.toString().split(":")[0]),
-                              int.parse(task.startTime.toString().split(":")[1])-timeRemind,
+                              int.parse(
+                                  task.startTime.toString().split(":")[0]),
+                              int.parse(
+                                      task.startTime.toString().split(":")[1]) -
+                                  timeRemind,
                               task);
+                          if (timeRepeat < 24) {
+                            NotifyHelper().scheduledRepeatNotification(
+                                0,
+                                int.parse(task.startTime
+                                        .toString()
+                                        .split(":")[0]) +
+                                    timeRepeat,
+                                int.parse(
+                                    task.startTime.toString().split(":")[1]),
+                                task);
+                          }
+                          else{
+                            NotifyHelper().scheduledRepeatNotification(
+                                1,
+                                int.parse(task.startTime
+                                    .toString()
+                                    .split(":")[0]),
+                                int.parse(
+                                    task.startTime.toString().split(":")[1]),
+                                task);
+                          }
                           return SizedBox(
                               child: GestureDetector(
                             onTap: () {
@@ -156,10 +181,14 @@ class HomeScreen extends StatelessWidget {
                                                           colorSystemWhite,
                                                       size: size.width * 0.8),
                                                   RoundedButton(
-                                                      text: 'Edit Task',
+                                                      text: 'Detail Task',
                                                       press: () {
-                                                        Navigator.pushNamed(context, Routers.editTask,arguments: task);
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            Routers.detailTask,
+                                                            arguments: task);
                                                       },
+
                                                       color: colorGreyTetiary,
                                                       textColor:
                                                           colorSystemWhite,
